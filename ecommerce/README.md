@@ -113,7 +113,7 @@ Authorization: Bearer <your_token_here>
 ## Project Structure
 
 ```
-e-commerce-api/
+comemerce/
 │
 ├── manage.py
 ├── requirements.txt
