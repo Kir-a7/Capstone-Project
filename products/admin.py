@@ -1,0 +1,28 @@
+from django.contrib import admin
+from .models import Category, Product, Wishlist
+
+# Register the Category model
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name',)  # Only 'name' is available in the Category model
+    search_fields = ('name',)
+    ordering = ('name',)
+
+admin.site.register(Category, CategoryAdmin)
+
+# Register the Product model
+class ProductAdmin(admin.ModelAdmin):
+    list_display = ('name', 'category', 'price', 'stock_quantity', 'created_date', 'image_url')
+    list_filter = ('category',)
+    search_fields = ('name', 'description')
+    ordering = ('-created_date',)
+
+admin.site.register(Product, ProductAdmin)
+
+# Register the Wishlist model
+class WishlistAdmin(admin.ModelAdmin):
+    list_display = ('user', 'product', 'added_date')
+    list_filter = ('user', 'added_date')
+    search_fields = ('user__username', 'product__name')
+    ordering = ('-added_date',)
+
+admin.site.register(Wishlist, WishlistAdmin)
