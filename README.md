@@ -1,206 +1,170 @@
-# E-commerce Product API
 
-## Overview
-The **E-commerce Product API** is a backend application built with Django and Django REST Framework (DRF). It provides functionality for managing products, users, and orders for an e-commerce platform. The API supports CRUD operations for products, categories, and users, along with authentication and search capabilities.
+# E-Commerce API
+
+This is a backend API for an e-commerce platform built using Django and Django REST Framework. The project provides functionalities to manage products, categories, orders, and wishlists, and integrates user authentication and role-based access control.
 
 ## Features
 
-### Product Management
-- Create, read, update, and delete (CRUD) operations for products.
-- Products include fields such as:
-  - Name
-  - Description
-  - Price
-  - Category
-  - Stock Quantity
-  - Image URL
-  - Created Date
+- **Product Management**: Allows users to view, create, update, and delete products.
+- **Wishlist Management**: Users can add products to their wishlist.
+- **Order Management**: Users can place, update, and delete orders.
+- **Role-based Authentication**: Users can interact with the API based on their roles.
+- **Stock Management**: Adjust product stock when orders are placed.
 
-### Category Management
-- Manage product categories with unique names.
+## Technologies Used
 
-### User Management
-- CRUD operations for user accounts.
-- Authentication using JWT (JSON Web Token).
-
-### Wishlist
-- Allows users to add products to a personal wishlist.
-
-### Orders
-- Create orders with products and quantities.
-- Automatically calculate the total price of an order.
-
-### Product Reviews
-- Users can submit reviews and ratings for products.
-
-### Search and Filtering
-- Search for products by name or category.
-- Filter products by:
-  - Category
-  - Price range
-  - Stock availability.
-
-### Pagination
-- Paginate product listings and search results to handle large datasets efficiently.
+- **Django**: A Python web framework for rapid development and clean, pragmatic design.
+- **Django REST Framework**: A powerful toolkit for building Web APIs.
+- **MySQL**: Used for data storage and management.
+- **Postman**: For testing API endpoints.
 
 ## Installation
 
-### Prerequisites
-- Python 3.9+
-- Django 4.0+
-- PostgreSQL (or any preferred database)
+### 1. Clone the repository
 
-### Setup
+```bash
+git clone https://github.com/yourusername/e-commerce-api.git
+cd e-commerce-api
+```
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/Kir-a7/Capstone-project.git
-   cd Capstone-project
-   ```
+### 2. Create a virtual environment
 
-2. Create and activate a virtual environment:
-   ```bash
-   python -m venv env
-   source env/bin/activate  # On Windows: env\Scripts\activate
-   ```
+```bash
+python -m venv env
+```
 
-3. Install dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
+### 3. Activate the virtual environment
 
-4. Configure the database in `settings.py`:
-   Update the `DATABASES` section with your database credentials.
+#### On macOS/Linux:
 
-5. Apply migrations:
-   ```bash
-   python manage.py makemigrations
-   python manage.py migrate
-   ```
+```bash
+source env/bin/activate
+```
 
-6. Create a superuser:
-   ```bash
-   python manage.py createsuperuser
-   ```
+#### On Windows:
 
-7. Start the server:
-   ```bash
-   python manage.py runserver
-   ```
+```bash
+env\Scriptsctivate
+```
+
+### 4. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 5. Set up the database
+
+Create a MySQL database for the project and configure it in `settings.py`.
+
+```bash
+python manage.py migrate
+```
+
+### 6. Create a superuser (for admin access)
+
+```bash
+python manage.py createsuperuser
+```
+
+Follow the prompts to create the superuser.
+
+### 7. Run the server
+
+```bash
+python manage.py runserver
+```
+
+The application will be available at `http://127.0.0.1:8000/`.
+
 
 ## API Endpoints
 
-### Authentication
-- Obtain JWT Token:
-  ```
-  POST /api/jwt/login/
-  ```
-- Refresh JWT Token:
-  ```
-  POST /api/jwt/refresh/
-  ```
+### Product Endpoints
+- **GET**: `/products/` – List all products
+- **POST**: `/products/` – Create a new product
+- **GET**: `/products/{id}/` – Get details of a specific product
+- **PUT/PATCH**: `/products/{id}/` – Update a specific product
+- **DELETE**: `/products/{id}/` – Delete a specific product
 
-### Products
-- List and create products:
-  ```
-  GET /api/products/
-  POST /api/products/
-  ```
-- Retrieve, update, and delete a product:
-  ```
-  GET /api/products/<id>/
-  PUT /api/products/<id>/
-  DELETE /api/products/<id>/
-  ```
+### Wishlist Endpoints
+- **GET**: `/wishlist/` – List all wishlist items
+- **POST**: `/wishlist/` – Add a product to the wishlist
+- **DELETE**: `/wishlist/{id}/` – Remove a product from the wishlist
 
-### Categories
-- List and create categories:
-  ```
-  GET /api/categories/
-  POST /api/categories/
-  ```
+### Order Endpoints
+- **GET**: `/orders/` – List all orders
+- **POST**: `/orders/` – Create a new order
+- **GET**: `/orders/{id}/` – Get details of a specific order
+- **PATCH**: `/orders/{id}/` – Update the status of an order
+- **DELETE**: `/orders/{id}/` – Delete an order (only if the order is not completed or canceled)
 
-### Wishlist
-- List and add products to wishlist:
-  ```
-  GET /api/wishlist/
-  POST /api/wishlist/
-  ```
+## Authentication
 
-### Orders
-- List and create orders:
-  ```
-  GET /api/orders/
-  POST /api/orders/
-  ```
+- Authentication is required for most actions involving orders and wishlists. 
+- Use **JWT (JSON Web Token)** for authorization. You can obtain the token by logging in with your credentials.
 
-### Reviews
-- List and create reviews:
-  ```
-  GET /api/reviews/
-  POST /api/reviews/
-  ```
+### Example Header for Authenticated Requests:
 
-### Search and Filtering
-- Search products by name or category:
-  ```
-  GET /api/products/?search=<query>
-  ```
-- Filter products:
-  ```
-  GET /api/products/?category=<category>&price_min=<min>&price_max=<max>&in_stock=<true|false>
-  ```
-
-## Additional Features
-- **Error Handling**: Proper error messages with HTTP status codes.
-- **Validation**: Ensures required fields are filled and valid.
-- **Security**: Authentication using JWT, permission classes for role-based access.
-
-## Deployment
-This project can be deployed on platforms like Heroku or PythonAnywhere. Ensure environment variables are set for:
-- `DATABASE_URL`
-- `SECRET_KEY`
-- `DEBUG`
-
-Example deployment steps:
 ```bash
-heroku login
-heroku create
-heroku config:set DATABASE_URL=<your-database-url>
-heroku config:set SECRET_KEY=<your-secret-key>
-heroku config:set DEBUG=False
+Authorization: Bearer <your_token_here>
 ```
 
-Push the code to Heroku:
-```bash
-git push heroku main
+## Project Structure
+
+```
+e-commerce-api/
+│
+├── manage.py
+├── requirements.txt
+├── e_commerce/
+│   ├── settings.py
+│   ├── urls.py
+│   ├── views.py
+│   ├── models.py
+│   └── serializers.py
+│
+├── products/
+│   ├── migrations/
+│   ├── admin.py
+│   ├── models.py
+│   ├── views.py
+│   ├── serializers.py
+│   ├── urls.py
+│   └── tests.py
+│
+└── templates/
 ```
 
-## Testing
-Use Postman to test the API. Import the following endpoints:
-- Authentication: `/api/jwt/login/`
-- CRUD for products, categories, wishlist, and orders.
-- Search and filtering for products.
+## Testing with Postman
 
-### Example Request
-- **POST /api/products/**
-  ```json
-  {
-    "name": "Laptop",
-    "description": "High-performance gaming laptop",
-    "price": 1500.00,
-    "category": 1,
-    "stock_quantity": 10,
-    "image_url": "http://example.com/laptop.jpg"
-  }
-  ```
+You can test the API using Postman by sending requests to the following endpoints (make sure to authenticate before accessing restricted endpoints):
 
-## Contribution
-Contributions are welcome! Feel free to open issues or submit pull requests.
+### Example POST request to create an order:
+
+```json
+POST /api/orders/
+{
+  "user": 1,
+  "items": [
+    {
+      "product": 1,
+      "quantity": 2
+    }
+  ]
+}
+```
+
+### Example DELETE request to delete an order:
+
+```json
+DELETE /api/orders/1/
+```
+
+## Contributing
+
+Feel free to fork the repository, submit issues, and open pull requests. Please follow best practices for contributing and respect the project’s code of conduct.
 
 ## License
-This project is licensed under the MIT License. See the LICENSE file for details.
 
-## Contact
-For questions or feedback, contact kirubelteshome6202@gmail.com
-
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
